@@ -1,8 +1,13 @@
 package org.prgrms.kdt;
 
+import org.prgrms.kdt.voucher.FixedAmountVoucher;
 import org.prgrms.kdt.voucher.Voucher;
 import org.prgrms.kdt.voucher.VoucherService;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,11 +15,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@SpringBootApplication
 public class CommandLineApplication {
-
     public static void main(String[] args) throws IOException {
+        // ┌> 위에서 @SpringBootApplication 을 사용했으므로 @ComponentScan이 붙은 AppConfiguration.class는 딱히 필요없다.
+        // │  거기에 딱히 명시한 설정도 없고..
         // IoC컨테이너 생성! => Service, Repository를 Bean으로 등록!
-        var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        var applicationContext = new AnnotationConfigApplicationContext(ShellConfiguration.class);
+
 
         // 프로그램 시작 : 지원 명령어 안내
         System.out.println(String.format("=== Voucher Program ===\n" +
@@ -66,4 +74,16 @@ public class CommandLineApplication {
         }
         System.out.println("program exited.");
     }
+}
+
+@Configuration  // 얘조차 Component라는 거!
+@ComponentScan(basePackages = {"org.prgrms.kdt.order", "org.prgrms.kdt.voucher"})
+class ShellConfiguration{
+
+    // ? 이런 구현체도 Configuration에 등록하나? 컴포넌트 아닌 일반 Bean들도?
+    // ? 그냥 생성할 일 있으면 new로 부르면 안되나?
+    // ? Bean으로 관리되어야 할 이유는?
+//    public FixedAmountVoucher fixedAmountVoucher(){
+//        return new FixedAmountVoucher(),,,  amount가 들어가야 해서 어째야할지 모르겠다. 이거 아닌 것 같기도
+//    }
 }
