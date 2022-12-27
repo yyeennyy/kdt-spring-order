@@ -5,7 +5,9 @@ import org.prgrms.kdt.voucher.FixedAmountVoucher;
 import org.prgrms.kdt.voucher.JDBCVoucherRepository;
 import org.prgrms.kdt.voucher.VoucherRepository;
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 import java.text.MessageFormat;
@@ -19,11 +21,14 @@ public class OrderTester {
     public static void main(String[] args) {
 //        // 실제 Spring Application Context 만들기
 //        // ┌> java파일 기반으로 Application Configuration을 사용할 때는 이 구현체를 사용하면 된다고 했다.
-        var applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.register(AppConfiguration.class);
-        var environment = applicationContext.getEnvironment();
-        environment.setActiveProfiles("dev");
-        applicationContext.refresh();
+        var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
+
+
+//        var applicationContext = new AnnotationConfigApplicationContext();
+//        applicationContext.register(AppConfiguration.class);   // 여기는
+//        var environment = applicationContext.getEnvironment(); // profile 실습할때 쓴 부분임
+//        environment.setActiveProfiles("dev");
+//        applicationContext.refresh();
 
 //        // 실습 : Property 읽어보기! (recall. .properties에 속성들 등록했고, Config파일에 @PropertySource 지정해줬었다.
 //        var environment = applicationContext.getEnvironment();
@@ -36,12 +41,19 @@ public class OrderTester {
 //        System.out.println(MessageFormat.format("supportVendors => {0}", supportVendors));
 //        System.out.println(MessageFormat.format("description => {0}", description));
         //ㄴ> 프로퍼티를 이렇게 가져오지 않고 아래와같이 해보겠다.
-//        var orderProperties = applicationContext.getBean(OrderProperties.class);// 이렇게 안하겠다는 말 : var environment = applicationContext.getEnvironment();
+        var orderProperties = applicationContext.getBean(OrderProperties.class);  // 이렇게 안하겠다는 말 : var environment = applicationContext.getEnvironment();
 //        System.out.println(MessageFormat.format("version => {0}", orderProperties.getVersion()));
 //        System.out.println(MessageFormat.format("minimumOrderAmount => {0}", orderProperties.getMinimumOrderAmount()));
 //        System.out.println(MessageFormat.format("supportVendors => {0}", orderProperties.getSupportVendors()));
 //        System.out.println(MessageFormat.format("description => {0}", orderProperties.getDescription()));
         // 프로퍼티끝!
+
+
+        // Resource 실습 부분  - 저 applicatoinContext는 ResourceLoader를 구현하는 애라고 했지
+        var resource = applicationContext.getResource("application.yaml");
+        //    └> 얘는 interface기 때문에 실질적으로 어떤 구현체를 가지고 오는지 확인을 해보자.
+        System.out.println(MessageFormat.format("Resource -> {0}", resource.getClass().getCanonicalName()));
+
 
         var customerId = UUID.randomUUID();
         var voucherRepository = applicationContext.getBean(VoucherRepository.class);

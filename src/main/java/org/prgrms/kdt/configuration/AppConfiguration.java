@@ -17,7 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 //@ComponentScan(basePackages = {"org.prgrms.kdt.order", "org.prgrms.kdt.voucher"},
 //        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = MemoryVoucherRepository.class)})
 //                                                                       ㄴ> 특정타입 빈을 제거
-@ComponentScan(basePackages = {"org.prgrms.kdt.order", "org.prgrms.kdt.voucher"})
+@ComponentScan(basePackages = {"org.prgrms.kdt.order", "org.prgrms.kdt.voucher", "org.prgrms.kdt.configuration"})
 // Base package를 설정! cf. 원하는것만 Scan되는 느낌도 있고 암튼..
 //@ComponentScan(basePackageClasses = {Order.class, Voucher.class})
 @PropertySource(value = "application.yaml", factory = YamlPropertiesFactory.class)
