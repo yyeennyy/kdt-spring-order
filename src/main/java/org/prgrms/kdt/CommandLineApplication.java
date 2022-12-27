@@ -9,15 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
 public class CommandLineApplication {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         // ┌> 위에서 @SpringBootApplication 을 사용했으므로 @ComponentScan이 붙은 AppConfiguration.class는 딱히 필요없다.
         // │  거기에 딱히 명시한 설정도 없고..
         // IoC컨테이너 생성! => Service, Repository를 Bean으로 등록!
@@ -32,8 +30,10 @@ public class CommandLineApplication {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         VoucherService voucherService = applicationContext.getBean(VoucherService.class);
-        List<Voucher> vouchers = new ArrayList<>();
+//        List<Voucher> vouchers = new ArrayList<>();
         String cmd = reader.readLine();
+        String fileName = "voucher_storage.db";
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName, true));
         loop:
         while (true) {
             switch(cmd) {
@@ -55,23 +55,35 @@ public class CommandLineApplication {
                             v = voucherService.createFixedAmountVoucher(amount); break;
                     }
                     if (v != null) {
-                        vouchers.add(v);
+                        outputStream.writeObject(v);
                     }
                     System.out.println("Voucher created."); break;
 
                 // list 커맨드를 통해 만들어진 바우처를 조회 가능하다.
+                // db파일에서 꺼내도록 하자
                 case "list":
-                    if(vouchers.isEmpty()){
+                    File voucherFile = new File(fileName);
+                    if(voucherFile.length() == 0){
                         System.out.println("No voucher exists.");
                         break;
                     }
-                    vouchers.stream()
-                            .forEach(x -> System.out.println(String.format("%-24s | id:%s", x.getClass().getSimpleName(), x.getVoucherId()))); break;
+                    ObjectInputStream fr = new ObjectInputStream(new FileInputStream(fileName));
+                    while(true){
+                        try {
+                            Voucher obj = (Voucher) fr.readObject();
+                            System.out.println(String.format("%-25s | id : %s", obj.getClass().getSimpleName(), obj.getVoucherId()));
+                        } catch(IOException e){
+                            break;
+                        }
+                    }
+                    fr.close();
+                    break;
                 case "exit":
                     break loop;
             }
             cmd = reader.readLine();
         }
+        outputStream.close();
         System.out.println("program exited.");
     }
 }
