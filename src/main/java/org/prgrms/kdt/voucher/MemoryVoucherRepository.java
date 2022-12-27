@@ -4,14 +4,16 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-@Primary                                                                            //┌>소멸시 콜백 또한 부르도록..
+@Profile("local")                                                                         //┌>소멸시 콜백 또한 부르도록..
 public class MemoryVoucherRepository implements VoucherRepository, InitializingBean, DisposableBean {  // lifecycle관련 실습 : InitializingBean을 구현하도록 했다.
 
     // Thread-safe를 위해 HashMap말고 이거 쓰셨다고함
