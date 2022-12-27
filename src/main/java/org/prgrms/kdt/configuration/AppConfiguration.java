@@ -1,9 +1,11 @@
-package org.prgrms.kdt;
+package org.prgrms.kdt.configuration;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 
 // 초기에 OrderContext라고 이름지었으나
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {"org.prgrms.kdt.order", "org.prgrms.kdt.voucher"})
 // Base package를 설정! cf. 원하는것만 Scan되는 느낌도 있고 암튼..
 //@ComponentScan(basePackageClasses = {Order.class, Voucher.class})
+@PropertySource(value = "application.yaml", factory = YamlPropertiesFactory.class)
+@EnableConfigurationProperties // <- yaml파일통한속성부여 실습 : @ConfiguraionProperties를 사용하기 위한 Enable annotation
 public class AppConfiguration {
 
 
