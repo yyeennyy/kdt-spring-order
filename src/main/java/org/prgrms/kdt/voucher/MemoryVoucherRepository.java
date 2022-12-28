@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-@Profile("local")                                                                         //┌>소멸시 콜백 또한 부르도록..
+//@Profile("local")                                                                         //┌>소멸시 콜백 또한 부르도록..
 public class MemoryVoucherRepository implements VoucherRepository, InitializingBean, DisposableBean {  // lifecycle관련 실습 : InitializingBean을 구현하도록 했다.
 
     // Thread-safe를 위해 HashMap말고 이거 쓰셨다고함

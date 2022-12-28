@@ -14,10 +14,6 @@ public class VoucherService {
         this.voucherRepository = voucherRepository;
     }
 
-//    public VoucherService(VoucherRepository voucherRepository) {
-//        this.voucherRepository = voucherRepository;
-//    }
-
     public Voucher getVoucher(UUID voucherId) {
         return voucherRepository
                 .findById(voucherId)

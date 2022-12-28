@@ -10,15 +10,24 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.channels.Channel;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class OrderTester {
     // OrderContext를 통해 XXXService들을 갖고오도록 변경함
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        // 실제 Spring Application Context 만들기
 //        // ┌> java파일 기반으로 Application Configuration을 사용할 때는 이 구현체를 사용하면 된다고 했다.
         var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
@@ -50,9 +59,21 @@ public class OrderTester {
 
 
         // Resource 실습 부분  - 저 applicatoinContext는 ResourceLoader를 구현하는 애라고 했지
-        var resource = applicationContext.getResource("application.yaml");
+        var resource = applicationContext.getResource("classpath:application.yaml");
         //    └> 얘는 interface기 때문에 실질적으로 어떤 구현체를 가지고 오는지 확인을 해보자.
+        var resource2 = applicationContext.getResource("file:sample.txt");
+        var resource3 = applicationContext.getResource("https://stackoverflow.com/");  // file갖고오는게 아니잖아요 얘는? 어떤구현체일까요?
+        // ㄴ> 얘는 UrlResource다. 그럼 getUrl로 가져와야함
         System.out.println(MessageFormat.format("Resource -> {0}", resource.getClass().getCanonicalName()));
+//        var strings = Files.readAllLines(resource.getFile().toPath());
+//        System.out.println(strings.stream().reduce("", (a, b) -> a + "\n" + b));  // list를 개행된문자열로 처리해보자
+
+        var readableByteChannel = Channels.newChannel((resource3.getURL().openStream())); //스트림을 통해 download한다. 그리고 채널을 열고
+        var bufferedReader = new BufferedReader(Channels.newReader(readableByteChannel, StandardCharsets.UTF_8));
+        var contents = bufferedReader.lines().collect(Collectors.joining("\n"));
+        System.out.println(contents);
+
+
 
 
         var customerId = UUID.randomUUID();
@@ -60,8 +81,8 @@ public class OrderTester {
         var voucher = voucherRepository.insert(new FixedAmountVoucher(UUID.randomUUID(), 10L));
 
         // profile실습부분.. environment.setActiveProfiles("dev")로인해 주입이 원한느대로 잘 되었는지?
-        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository instanceof JDBCVoucherRepository));
-        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository.getClass().getCanonicalName()));
+//        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository instanceof JDBCVoucherRepository));
+//        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository.getClass().getCanonicalName()));
 
 //        var orderContext = new AppConfiguration();  <- 이렇게 new로 하지 않고, Spring Application Context를 만들어야 한다.
 //        var orderService = orderContext.orderService();

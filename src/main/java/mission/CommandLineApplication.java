@@ -1,19 +1,14 @@
-package org.prgrms.kdt;
+package mission;
 
-import org.prgrms.kdt.voucher.FixedAmountVoucher;
 import org.prgrms.kdt.voucher.Voucher;
 import org.prgrms.kdt.voucher.VoucherService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@SpringBootApplication
 public class CommandLineApplication {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         // ┌> 위에서 @SpringBootApplication 을 사용했으므로 @ComponentScan이 붙은 AppConfiguration.class는 딱히 필요없다.
@@ -22,18 +17,25 @@ public class CommandLineApplication {
         var applicationContext = new AnnotationConfigApplicationContext(ShellConfiguration.class);
 
 
+
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        VoucherService voucherService = applicationContext.getBean(VoucherService.class);
+//        List<Voucher> vouchers = new ArrayList<>();
+
+        // 현재 app에서 사용할 input, output stream을 아예 생성해두기 (사용할 때마다 생성하지 않고)
+        // ㄴ> 이러면 문제점 : read할 때 그동안의 모든데이터를(=처음부터 끝까지) 읽는게 아니라 마지막 읽은시점부터 끝까지 읽는다.
+        String fileName = "mission/voucher_storage.ser";
+        ObjectOutputStream os = null;
+        FileInputStream fis = new FileInputStream(fileName);
+
+
         // 프로그램 시작 : 지원 명령어 안내
         System.out.println(String.format("=== Voucher Program ===\n" +
                 "Type exit to exit the program.\n" +
                 "Type create to create a new voucher.\n" +
                 "Type list to list all vouchers\n"));
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        VoucherService voucherService = applicationContext.getBean(VoucherService.class);
-//        List<Voucher> vouchers = new ArrayList<>();
         String cmd = reader.readLine();
-        String fileName = "voucher_storage.db";
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName, true));
         loop:
         while (true) {
             switch(cmd) {
@@ -55,35 +57,37 @@ public class CommandLineApplication {
                             v = voucherService.createFixedAmountVoucher(amount); break;
                     }
                     if (v != null) {
-                        outputStream.writeObject(v);
+                        boolean append = (new File(fileName)).exists();
+                        if (append)
+                            os = new AppendableObjectOutputStream(new FileOutputStream(fileName, true));
+                        else
+                            os = new ObjectOutputStream(new FileOutputStream(fileName));
+                        os.writeObject(v);
+                        os.flush();
+                        os.close();
+                        System.out.println("Voucher created."); break;
                     }
-                    System.out.println("Voucher created."); break;
+                    break;
 
                 // list 커맨드를 통해 만들어진 바우처를 조회 가능하다.
-                // db파일에서 꺼내도록 하자
                 case "list":
-                    File voucherFile = new File(fileName);
-                    if(voucherFile.length() == 0){
-                        System.out.println("No voucher exists.");
-                        break;
-                    }
-                    ObjectInputStream fr = new ObjectInputStream(new FileInputStream(fileName));
                     while(true){
                         try {
-                            Voucher obj = (Voucher) fr.readObject();
+                            ObjectInputStream is = new ObjectInputStream(fis);  // 왜 여기서 header때문에 EOFException이 생기냐구 // 파일지우고 새로하는건 됨  // 이제는 왜 또 이게 null인지...  // 어떤코드보니까 fis는 재사용하가고 ois는 new하는데?
+                            Voucher obj = (Voucher) is.readObject();
                             System.out.println(String.format("%-25s | id : %s", obj.getClass().getSimpleName(), obj.getVoucherId()));
-                        } catch(IOException e){
-                            break;
+                            is.close();
+                        } catch(EOFException e){
+                            break;  // 이때 is.close()는?
                         }
                     }
-                    fr.close();
                     break;
                 case "exit":
                     break loop;
             }
             cmd = reader.readLine();
         }
-        outputStream.close();
+
         System.out.println("program exited.");
     }
 }
@@ -96,6 +100,20 @@ class ShellConfiguration{
     // ? 그냥 생성할 일 있으면 new로 부르면 안되나?
     // ? Bean으로 관리되어야 할 이유는?
 //    public FixedAmountVoucher fixedAmountVoucher(){
-//        return new FixedAmountVoucher(),,,  amount가 들어가야 해서 어째야할지 모르겠다. 이거 아닌 것 같기도
+//        return new FixedAmountVoucher(),,,  amount가 들어가야 해서 어째야할지 모르겠다. 이거 아닌 것 같다.
 //    }
+}
+
+
+
+class AppendableObjectOutputStream extends ObjectOutputStream{
+
+    public AppendableObjectOutputStream(OutputStream out) throws IOException {
+        super(out);
+    }
+
+    @Override
+    protected void writeStreamHeader() throws IOException {
+        // make it do nothing!!!
+    }
 }
