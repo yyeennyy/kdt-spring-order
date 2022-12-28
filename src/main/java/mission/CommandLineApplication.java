@@ -27,7 +27,8 @@ public class CommandLineApplication {
         // ㄴ> 이러면 문제점 : read할 때 그동안의 모든데이터를(=처음부터 끝까지) 읽는게 아니라 마지막 읽은시점부터 끝까지 읽는다.
         String fileName = "mission/voucher_storage.ser";
         ObjectOutputStream os = null;
-        FileInputStream fis = new FileInputStream(fileName);
+        ObjectInputStream is = null;
+
 
 
         // 프로그램 시작 : 지원 명령어 안내
@@ -57,11 +58,7 @@ public class CommandLineApplication {
                             v = voucherService.createFixedAmountVoucher(amount); break;
                     }
                     if (v != null) {
-                        boolean append = (new File(fileName)).exists();
-                        if (append)
-                            os = new AppendableObjectOutputStream(new FileOutputStream(fileName, true));
-                        else
-                            os = new ObjectOutputStream(new FileOutputStream(fileName));
+                        os = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileName, true)));
                         os.writeObject(v);
                         os.flush();
                         os.close();
@@ -71,13 +68,21 @@ public class CommandLineApplication {
 
                 // list 커맨드를 통해 만들어진 바우처를 조회 가능하다.
                 case "list":
+                    FileInputStream fis = new FileInputStream(fileName);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
                     while(true){
                         try {
-                            ObjectInputStream is = new ObjectInputStream(fis);  // 왜 여기서 header때문에 EOFException이 생기냐구 // 파일지우고 새로하는건 됨  // 이제는 왜 또 이게 null인지...  // 어떤코드보니까 fis는 재사용하가고 ois는 new하는데?
+                            is = new ObjectInputStream(bis);
                             Voucher obj = (Voucher) is.readObject();
                             System.out.println(String.format("%-25s | id : %s", obj.getClass().getSimpleName(), obj.getVoucherId()));
-                            is.close();
                         } catch(EOFException e){
+                            // 만약 new ObjectInputStream()할 때 발생한 EOFException이면 읽을거리가 없다.
+                            // objectInputStream에서 읽을 게 없으면 header가 안생기나? is가 null인데, readStreamHeader에서 EOFException이 일어나서 이쪽으로 오네..
+                            if(is == null){
+                                System.out.println("empty!");
+                                break;
+                            }
+                            is.close(); // 아 이거 닫으면 안에있는 bis같은것도 닫히나봐!!
                             break;  // 이때 is.close()는?
                         }
                     }
@@ -87,7 +92,7 @@ public class CommandLineApplication {
             }
             cmd = reader.readLine();
         }
-
+        is.close();
         System.out.println("program exited.");
     }
 }
@@ -105,15 +110,15 @@ class ShellConfiguration{
 }
 
 
-
-class AppendableObjectOutputStream extends ObjectOutputStream{
-
-    public AppendableObjectOutputStream(OutputStream out) throws IOException {
-        super(out);
-    }
-
-    @Override
-    protected void writeStreamHeader() throws IOException {
-        // make it do nothing!!!
-    }
-}
+// 전혀 쓸일없을거같은데 지금나는?..
+//class AppendableObjectOutputStream extends ObjectOutputStream{
+//
+//    public AppendableObjectOutputStream(OutputStream out) throws IOException {
+//        super(out);
+//    }
+//
+//    @Override
+//    protected void writeStreamHeader() throws IOException {
+//        // make it do nothing!!!
+//    }
+//}
