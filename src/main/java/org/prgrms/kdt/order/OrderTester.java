@@ -2,30 +2,27 @@ package org.prgrms.kdt.order;
 
 import org.prgrms.kdt.configuration.AppConfiguration;
 import org.prgrms.kdt.voucher.FixedAmountVoucher;
-import org.prgrms.kdt.voucher.JDBCVoucherRepository;
 import org.prgrms.kdt.voucher.VoucherRepository;
-import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.channels.Channel;
 import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class OrderTester {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderTester.class);
+
+
     // OrderContext를 통해 XXXService들을 갖고오도록 변경함
     public static void main(String[] args) throws IOException {
 //        // 실제 Spring Application Context 만들기
@@ -51,10 +48,11 @@ public class OrderTester {
 //        System.out.println(MessageFormat.format("description => {0}", description));
         //ㄴ> 프로퍼티를 이렇게 가져오지 않고 아래와같이 해보겠다.
         var orderProperties = applicationContext.getBean(OrderProperties.class);  // 이렇게 안하겠다는 말 : var environment = applicationContext.getEnvironment();
-//        System.out.println(MessageFormat.format("version => {0}", orderProperties.getVersion()));
-//        System.out.println(MessageFormat.format("minimumOrderAmount => {0}", orderProperties.getMinimumOrderAmount()));
-//        System.out.println(MessageFormat.format("supportVendors => {0}", orderProperties.getSupportVendors()));
-//        System.out.println(MessageFormat.format("description => {0}", orderProperties.getDescription()));
+        logger.info("logger name => {}", logger.getName());
+        logger.info("version => {}", orderProperties.getVersion());
+        logger.info("minimumOrderAmount => {}", orderProperties.getMinimumOrderAmount());
+        logger.info("supportVendors => {}", orderProperties.getSupportVendors());
+        logger.info("description => {}", orderProperties.getDescription());
         // 프로퍼티끝!
 
 
@@ -68,13 +66,11 @@ public class OrderTester {
 //        var strings = Files.readAllLines(resource.getFile().toPath());
 //        System.out.println(strings.stream().reduce("", (a, b) -> a + "\n" + b));  // list를 개행된문자열로 처리해보자
 
-        var readableByteChannel = Channels.newChannel((resource3.getURL().openStream())); //스트림을 통해 download한다. 그리고 채널을 열고
-        var bufferedReader = new BufferedReader(Channels.newReader(readableByteChannel, StandardCharsets.UTF_8));
-        var contents = bufferedReader.lines().collect(Collectors.joining("\n"));
-        System.out.println(contents);
-
-
-
+//        var readableByteChannel = Channels.newChannel((resource3.getURL().openStream())); //스트림을 통해 download한다. 그리고 채널을 열고
+//        var bufferedReader = new BufferedReader(Channels.newReader(readableByteChannel, StandardCharsets.UTF_8));
+//        var contents = bufferedReader.lines().collect(Collectors.joining("\n"));
+//        System.out.println(contents);
+//
 
         var customerId = UUID.randomUUID();
         var voucherRepository = applicationContext.getBean(VoucherRepository.class);

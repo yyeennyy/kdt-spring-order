@@ -1,0 +1,12 @@
+18:16:58.844 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:16:58.846 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:16:58.846 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:16:58.846 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:16:58.846 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:16:58.870 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:16:58.870 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:16:58.871 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:16:58.871 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:16:58.871 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3

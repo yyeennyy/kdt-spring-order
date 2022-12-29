@@ -1,0 +1,48 @@
+18:32:15.197 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:32:15.199 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:32:15.199 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:32:15.199 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:15.199 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:15.220 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:32:15.220 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:32:15.221 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:32:15.221 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:32:15.221 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:32:32.269 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:32:32.270 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:32:32.270 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:32:32.270 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:32.270 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:32.292 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:32:32.293 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:32:32.293 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:32:32.293 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:32:32.293 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:32:35.247 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:32:35.248 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:32:35.248 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:32:35.248 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:35.248 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:35.270 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:32:35.271 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:32:35.271 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:32:35.271 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:32:35.271 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:32:39.073 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:32:39.074 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:32:39.075 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:32:39.075 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:39.075 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:32:39.095 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:32:39.095 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:32:39.095 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:32:39.095 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:32:39.095 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3

@@ -1,0 +1,43 @@
+18:06:09.201 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:06:09.203 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:06:09.203 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:06:09.203 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:06:09.203 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:07:06.400 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:07:06.402 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:07:06.402 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:07:06.403 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:07:06.403 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:07:06.427 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:07:06.428 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:07:06.428 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:07:06.428 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:07:06.428 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:08:16.684 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:08:16.686 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:08:16.687 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:08:16.687 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:08:16.687 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:08:16.710 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:08:16.711 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:08:16.711 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:08:16.711 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:08:16.711 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3
+18:11:37.358 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] version => v1.0
+18:11:37.360 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] minimumOrderAmount => 1
+18:11:37.360 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] supportVendors => [a, b, c, d]
+18:11:37.360 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:11:37.360 [main] DEBUG o.prgrms.kdt.order.OrderProperties -- [OrderProperties] javaHome => C:\tools\jdk-17.0.5
+18:11:37.384 [main] INFO  org.prgrms.kdt.order.OrderTester -- logger name => org.prgrms.kdt.order.OrderTester
+18:11:37.384 [main] INFO  org.prgrms.kdt.order.OrderTester -- version => v1.0
+18:11:37.384 [main] INFO  org.prgrms.kdt.order.OrderTester -- minimumOrderAmount => 1
+18:11:37.384 [main] INFO  org.prgrms.kdt.order.OrderTester -- supportVendors => [a, b, c, d]
+18:11:37.384 [main] INFO  org.prgrms.kdt.order.OrderTester -- description => line 1 hello world
+line 2 xxxx
+line 3

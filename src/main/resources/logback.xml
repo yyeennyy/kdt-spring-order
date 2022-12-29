@@ -1,0 +1,59 @@
+<configuration>
+
+<!--    패턴-->
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n"/>
+
+<!--    타임스탬프! fileAppender에 사용중-->
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
+
+
+
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+<!--&lt;!&ndash;    FileAppender를 새로 정의했다&ndash;&gt;-->
+<!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>logs/kdt_${bySecond}.log</file>-->
+<!--        <encoder>-->
+<!--            <pattern>${LOG_PATTERN}</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+
+<!--    RollingFileAppender도 써보자!! 일별로 log가 file에 기록되게끔?-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/access.log</file>
+<!--        두개의 Policy를 정의해야함-->
+<!--        1. rollingPolicy : 어떤파일을 만들거냐-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  <!-- 특정시간이 지나면 파일이 만들어짐. -->
+            <fileNamePattern>logs/access-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+<!--        2. triggeringPolicy : 언제 파일을 만들거야?-->
+<!--        근데 rollingPolicy의 class=""에 지정한 TimeBaseRollingPolicy는 implements TriggeringPolicy하고있어서 rollingPolicy만설정해도 ㄱㅊ-->
+<!--        다시말해 알아서 triggering된다구 -->
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <!--    logger에다가 그 FileAppender를 새로 추가해보쟈-->
+    <logger name="org.prgrms.kdt" level="debug">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+
+
+
+    <root level="warn">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

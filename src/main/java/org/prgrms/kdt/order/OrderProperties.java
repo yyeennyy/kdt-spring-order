@@ -1,5 +1,7 @@
 package org.prgrms.kdt.order;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,6 +16,12 @@ import java.util.List;
 @ConfigurationProperties(prefix = "kdt")  //이 어노테이션은 스프링부트꺼라? AppConfiguraion 설정파일에다가 Enable!~~~써줘야함
 //필드 접근이 되나까..
 public class OrderProperties implements InitializingBean {  // 이 값들을 간단히 확인가능한 방법. 그냥 InitializingBean 구현하면 되겠지
+
+    private final static Logger logger = LoggerFactory.getLogger(OrderProperties.class);
+
+
+
+
 //    @Value("v1.1.1")   // 이렇게 원하는값을 필드에 주입시킬 수 있다.
 //    private String version;
 //
@@ -45,11 +53,11 @@ public class OrderProperties implements InitializingBean {  // 이 값들을 간
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println(MessageFormat.format("[OrderProperties] version => {0}", version));
-        System.out.println(MessageFormat.format("[OrderProperties] minimumOrderAmount => {0}", minimumOrderAmount));
-        System.out.println(MessageFormat.format("[OrderProperties] supportVendors => {0}", supportVendors));
-        System.out.println(MessageFormat.format("[OrderProperties] javaHome => {0}", javaHome));
-        System.out.println(MessageFormat.format("[OrderProperties] javaHome => {0}", javaHome));
+        logger.debug("[OrderProperties] version => {}", version);
+        logger.debug("[OrderProperties] minimumOrderAmount => {}", minimumOrderAmount);
+        logger.debug("[OrderProperties] supportVendors => {}", supportVendors);
+        logger.debug("[OrderProperties] javaHome => {}", javaHome);
+        logger.debug("[OrderProperties] javaHome => {}", javaHome);
     }
 
 
