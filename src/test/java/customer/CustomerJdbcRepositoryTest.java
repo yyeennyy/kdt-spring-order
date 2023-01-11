@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.sql.DataSource;
@@ -47,6 +48,13 @@ class CustomerJdbcRepositoryTest {
             datasource.setMinimumIdle(100);
             return datasource;
         }
+
+        // Bean으로 등록해줘야 JdbcTemplate을 사용할 수 있겠지!
+        // 이렇게 Bean등록 안하면 NoSuchBeanDefinitionException
+        @Bean
+        public JdbcTemplate jdbcTemplate(DataSource dataSource){
+            return new JdbcTemplate(dataSource);
+        }
     }
 
     @Autowired
@@ -62,7 +70,7 @@ class CustomerJdbcRepositoryTest {
     // 테스트 전 딱 한번만 시행하도록!
     @BeforeAll
     void setup() {
-        newCustomer = new Customer(UUID.randomUUID(), "test-user", "test1-user@gmail.com", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        newCustomer = new Customer(UUID.randomUUID(), "test-user", "test1-user@gmail.com", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
         customerJdbcRepository.deleteAll();
     }
     // static 불가능하다. @BeforeAll 그럼 어떡하지?

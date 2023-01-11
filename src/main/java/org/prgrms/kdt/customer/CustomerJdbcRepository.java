@@ -3,6 +3,9 @@ package org.prgrms.kdt.customer;
 import org.prgrms.kdt.JdbcCustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -22,10 +25,24 @@ public class CustomerJdbcRepository implements CustomerRepository {
     private static final Logger logger = LoggerFactory.getLogger(JdbcCustomerRepository.class);
 
     // DataSource를 통해 connection을 얻을 것임
-    private final DataSource dataSource;
+     private final DataSource dataSource;
+    // 아래 JdbcTemplate이 있으면 DataSource는 사실 필요 없다.
+    private final JdbcTemplate jdbcTemplate;
+
+    // 인스턴스마다 있을 필요 없으니까 이 RowMapper는 static 필드로 두자!
+    // 이 RowMapper는 그냥, resultSet과 index 받으면 Customer 반환해주는 거임. 말그대로 RowMapper!!!!
+    private static RowMapper<Customer> customerRowMapper = (resultSet, i) -> {
+        var customerName = resultSet.getString("name");
+        var email = resultSet.getString("email");
+        var customerId = toUUID(resultSet.getBytes("customer_id"));
+        var lastLoginAt = resultSet.getTimestamp("last_login_at") != null ? resultSet.getTimestamp("last_login_at").toLocalDateTime() : null;
+        var createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+        return new Customer(customerId, customerName, email, lastLoginAt, createdAt);
+    };
 
     // DataSource 생성자 주입
-    public CustomerJdbcRepository(DataSource dataSource) {
+    public CustomerJdbcRepository(DataSource dataSource, JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
         this.dataSource = dataSource;
     }
 
@@ -73,43 +90,22 @@ public class CustomerJdbcRepository implements CustomerRepository {
 
     @Override
     public List<Customer> findAll() {
-        List<Customer> allCustomers = new ArrayList<>();
-        try (
-//                var connection = DriverManager.getConnection(("jdbc:mysql://localhost/order_mgmt"), "root", "root1234!");
-                var connection = dataSource.getConnection();  // dataSource의 구현체에 의해서 connection을 가져온다 (Simple..쓰면 DriverManager에서 가져오는 것과 동일, HikariCP쓰면 pool에서 가져옴)
-                // └> 참고 : 관심사의 분리가 잘 적용됨 - dataSource에서 어떤방식으로 connection을 가져오는지는 상관x, 그냥 connection만 가져오면 됨.
-                var statement = connection.prepareStatement("select * from customers");
-                var resultSet = statement.executeQuery()
-        ) {
-            while(resultSet.next()){
-                mapToCustomer(allCustomers, resultSet);
-            }
-        } catch (SQLException throwable) {
-            logger.error("Got error while closing connection", throwable);
-            throw new RuntimeException(throwable);
-        }
-        return allCustomers;
+        // jdbc template에서는 query()라는 메서드를 제공
+        // sql와 RowMapper를 전달
+        return jdbcTemplate.query("select * from customers", customerRowMapper);
     }
 
     @Override
     public Optional<Customer> findById(UUID customerId) {
-        List<Customer> allCustomers = new ArrayList<>();
-        try (
-                var connection = dataSource.getConnection();
-                var statement = connection.prepareStatement("select * from customers WHERE customer_id = UUID_TO_BIN(?)");
-        ) {
-            statement.setBytes(1, customerId.toString().getBytes());
-            try(var resultSet = statement.executeQuery()){
-                while(resultSet.next()){ // 결과(resultSet)를 while 돌며 Customer로 매핑
-                    mapToCustomer(allCustomers, resultSet);
-                }
-            }
-        } catch (SQLException throwable) {
-            logger.error("Got error while closing connection", throwable);
-            throw new RuntimeException(throwable);
+        // 일반 query()는 List를 가져옴. 하나만 꺼내오는 건 queryForObject 사용
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject("select * from customers WHERE customer_id = UUID_TO_BIN(?)",
+                    customerRowMapper,
+                    customerId.toString().getBytes()));
+        } catch (EmptyResultDataAccessException e){
+            logger.error("Got empty result", e);
+            return Optional.empty();
         }
-
-        return allCustomers.stream().findFirst();
     }
 
     @Override
@@ -167,6 +163,12 @@ public class CustomerJdbcRepository implements CustomerRepository {
         }
     }
 
+    @Override
+    public int count() {
+        // 암튼 결과값이 하나인 것에 대해서는 queryyForObject 사용ㅎㅏ면 되고,
+        // 이렇게 count()처럼 int 하나 받는 것도 이렇게!
+        return jdbcTemplate.queryForObject("select count(*) from customers", Integer.class);
+    }
 
     private static void mapToCustomer(List<Customer> allCustomers, ResultSet resultSet) throws SQLException {
         var customerName = resultSet.getString("name");
