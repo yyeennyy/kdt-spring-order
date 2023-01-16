@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+//@Repository
 //@Profile("local")                                                                         //┌>소멸시 콜백 또한 부르도록..
 public class MemoryVoucherRepository implements VoucherRepository, InitializingBean, DisposableBean {  // lifecycle관련 실습 : InitializingBean을 구현하도록 했다.
 
