@@ -131,6 +131,10 @@ public class JdbcCustomerRepository {
         return new UUID(byteBuffer.getLong(), byteBuffer.getLong());
     }
 
+//    public void transactionTest(){
+//
+//    }
+
     public static void main(String[] args){
         var customerRepository = new JdbcCustomerRepository();
         var count = customerRepository.deleteAllCustomers();
